@@ -3,6 +3,9 @@
 .header {
   border-bottom: 1px solid $gray-line;
   padding: 40px 0;
+  @media (max-width: 768px) {
+    padding: 20px 0;
+  }
 
   .container {
     display: flex;
@@ -10,11 +13,22 @@
     justify-content: space-between;
   }
 
+  &__inner {
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+
+
   &__logo {
     display: flex;
 
+    @media (max-width: 768px) {
+      margin-bottom: 15px;
+    }
     img {
       margin-right: 15px;
+
     }
 
     h1 {
