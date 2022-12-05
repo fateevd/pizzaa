@@ -1,13 +1,31 @@
 import React from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import { setSortName } from '../redux/slices/filterSlice';
+import {RootState} from "../redux/store";
+
+type Sort = {
+  name: string,
+  sortProperty: string,
+}
 
 const Sort = () => {
-  const sortName = ['популярности', 'цене', 'алфавиту'];
+  const dispatch = useDispatch();
+  const sort = useSelector((state: RootState)=> state.filter.sort)
+
+
+  const sortName: Sort[] = [
+    {name: 'Популярность (DESC)', sortProperty: 'rating'},
+    {name: 'Популярность (ASC)', sortProperty: '-rating'},
+    {name: 'цене (DESC)', sortProperty: 'price'},
+    {name: 'цене (ASC)', sortProperty: '-price'},
+    {name: 'алфавиту (DESC)', sortProperty: 'title'},
+    {name: 'алфавиту (ASC)', sortProperty: '-title'},
+  ];
 
   const [open, setOpen] = React.useState(false);
-  const [activeSortName, setActiveSortName] = React.useState(0);
 
-  const onSelect = (i: number) => {
-    setActiveSortName(i);
+  const onSelect = (i: Sort) => {
+    dispatch(setSortName(i));
     setOpen(false);
   }
 
@@ -27,19 +45,19 @@ const Sort = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(prevState => !prevState)}>{sortName[activeSortName]}</span>
+        <span onClick={() => setOpen(prevState => !prevState)}>{sort.name}</span>
       </div>
       {open &&
-        <div className="sort__popup">
-          <ul>
-            {sortName.map((name, index) =>
-              <React.Fragment key={index}>
-                <li onClick={() => onSelect(index)}
-                    className={activeSortName === index ? "active" : ""}>{name}</li>
-              </React.Fragment>
-            )}
-          </ul>
-        </div>
+          <div className="sort__popup">
+              <ul>
+                {sortName.map((item,index) =>
+                  <React.Fragment key={index}>
+                    <li onClick={() => onSelect(item)}
+                        className={item.name === sort.name ? "active" : ""}>{item.name}</li>
+                  </React.Fragment>
+                )}
+              </ul>
+          </div>
       }
     </div>
   );

@@ -1,8 +1,18 @@
 import React from 'react';
 import Logo from "../assets/img/pizza-logo.svg";
 import {Link} from "react-router-dom";
+import Search from "./Search";
+import {useDispatch, useSelector} from "react-redux";
+import {setSearchValue} from "../redux/slices/filterSlice";
+import {RootState} from "../redux/store";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const value = useSelector((state : RootState) => state.filter.searchValue)
+  const onChange = (e : string) => {
+    dispatch(setSearchValue(e));
+  }
+
   return (
     <div className="header">
       <div className="container header__inner">
@@ -13,6 +23,7 @@ const Header = () => {
             <p>самая вкусная пицца во вселенной</p>
           </div>
         </div>
+        <Search change={onChange} value={value}/>
         <div className="header__cart">
           <Link to="/card" className="button button--cart">
             <span>520 ₽</span>

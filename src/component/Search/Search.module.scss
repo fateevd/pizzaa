@@ -1,0 +1,28 @@
+.root {
+  position: relative;
+
+  svg {
+    position: absolute;
+  }
+
+  &__search {
+    left: 10px;
+    top: 9px;
+  }
+
+  &__input {
+    border: 1px solid rgba(0,0,0, 0.1);
+    padding: 10px 30px;
+    outline: none;
+    width: 300px;
+    border-radius: 15px;
+    font-size: 16px;
+  }
+
+}
+
+.clear {
+  cursor: pointer;
+  right: 10px;
+  top: 8px;
+}
