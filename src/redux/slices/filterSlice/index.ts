@@ -1,7 +1,6 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
-import qs, {ParsedQs} from "qs";
-import sort from "../../../component/Sort";
+import qs from "qs";
 
 export type Sort = {
   name: string,
@@ -13,7 +12,6 @@ export interface CounterState {
   sort: Sort,
   searchValue: string,
 }
-
 
 const initialState: CounterState = {
   categoryId: 0,

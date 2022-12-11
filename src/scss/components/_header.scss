@@ -22,7 +22,7 @@
 
   &__logo {
     display: flex;
-
+    cursor: pointer;
     @media (max-width: 768px) {
       margin-bottom: 15px;
     }

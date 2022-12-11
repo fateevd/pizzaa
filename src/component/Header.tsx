@@ -1,10 +1,11 @@
 import React from 'react';
 import Logo from "../assets/img/pizza-logo.svg";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Search from "./Search";
 import {useDispatch, useSelector} from "react-redux";
 import {setSearchValue} from "../redux/slices/filterSlice";
 import {RootState} from "../redux/store";
+import {calcAllCount} from "../utils";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -12,11 +13,13 @@ const Header = () => {
   const onChange = (e : string) => {
     dispatch(setSearchValue(e));
   }
-
+  const countPizza = useSelector((state: RootState) => state.cart);
+  const {items, totalPrice} = countPizza;
+  const navigate = useNavigate();
   return (
     <div className="header">
-      <div className="container header__inner">
-        <div className="header__logo">
+      <div className="container header__inner" >
+        <div className="header__logo" onClick={() => navigate('/')}>
           <img width="38" src={Logo} alt="Pizza logo"/>
           <div>
             <h1>React Pizza</h1>
@@ -26,7 +29,7 @@ const Header = () => {
         <Search change={onChange} value={value}/>
         <div className="header__cart">
           <Link to="/card" className="button button--cart">
-            <span>520 ₽</span>
+            <span>{totalPrice} ₽</span>
             <div className="button__delimiter"></div>
             <svg
               width="18"
@@ -57,7 +60,7 @@ const Header = () => {
                 strokeLinejoin="round"
               />
             </svg>
-            <span>0</span>
+            <span>{calcAllCount(items)}</span>
           </Link>
         </div>
       </div>

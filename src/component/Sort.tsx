@@ -1,6 +1,6 @@
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import { setSortName } from '../redux/slices/filterSlice';
+import {setSortName} from '../redux/slices/filterSlice';
 import {RootState} from "../redux/store";
 
 type Sort = {
@@ -10,8 +10,8 @@ type Sort = {
 
 const Sort = () => {
   const dispatch = useDispatch();
-  const sort = useSelector((state: RootState)=> state.filter.sort)
-
+  const sort = useSelector((state: RootState) => state.filter.sort)
+  const sortRef = React.useRef(null);
 
   const sortName: Sort[] = [
     {name: 'Популярность (DESC)', sortProperty: 'rating'},
@@ -29,8 +29,23 @@ const Sort = () => {
     setOpen(false);
   }
 
+  React.useEffect(() => {
+    const handleOutSide = (event: any) => {
+      if (!event.path.includes(sortRef.current)) {
+        setOpen(false);
+      }
+    }
+
+    document.body.addEventListener("click", handleOutSide);
+
+    return () => {
+      document.body.removeEventListener("click", handleOutSide);
+    }
+
+  }, []);
+
   return (
-    <div className="sort">
+    <div className="sort" ref={sortRef}>
       <div className="sort__label">
         <svg
           width="10"
@@ -50,7 +65,7 @@ const Sort = () => {
       {open &&
           <div className="sort__popup">
               <ul>
-                {sortName.map((item,index) =>
+                {sortName.map((item, index) =>
                   <React.Fragment key={index}>
                     <li onClick={() => onSelect(item)}
                         className={item.name === sort.name ? "active" : ""}>{item.name}</li>

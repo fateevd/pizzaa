@@ -1,12 +1,18 @@
-import React, { FC } from 'react';
+import React, {FC} from 'react';
+import {CartItems} from "../redux/slices/cartSlice/types";
+import {useDispatch} from "react-redux";
+import {addCountPizza, deletePizzaToCart} from "../redux/slices/cartSlice";
 
-// type PropsCardItem = {
-//   name: string,
-//   description: string,
-//   count: number,
-// }
+const CartItem: FC<CartItems> = (item) => {
+  const dispatch = useDispatch();
+  const changeCount = (count: number) => {
+    dispatch(addCountPizza({id: item.id, count, type: item.type, size: item.size}));
+  }
 
-const CardIItem = () => {
+  const deleteItemCart = () => {
+    dispatch(deletePizzaToCart({id: item.id, type: item.type, size: item.size}))
+  }
+
   return (
     <div className="cart__item">
       <div className="cart__item-img">
@@ -17,11 +23,12 @@ const CardIItem = () => {
         />
       </div>
       <div className="cart__item-info">
-        <h3>Сырный цыпленок</h3>
-        <p>тонкое тесто, 26 см.</p>
+        <h3>{item.title}</h3>
+        <p>{item.type} {item.size} см.</p>
       </div>
       <div className="cart__item-count">
-        <div className="button button--outline button--circle cart__item-count-minus">
+        <div className="button button--outline button--circle cart__item-count-minus"
+             onClick={() => changeCount(item.count - 1)}>
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M5.92001 3.84V5.76V8.64C5.92001 9.17016 5.49017 9.6 4.96001 9.6C4.42985 9.6 4.00001 9.17016 4.00001 8.64L4 5.76L4.00001 3.84V0.96C4.00001 0.42984 4.42985 0 4.96001 0C5.49017 0 5.92001 0.42984 5.92001 0.96V3.84Z"
@@ -32,8 +39,9 @@ const CardIItem = () => {
           </svg>
 
         </div>
-        <b>2</b>
-        <div className="button button--outline button--circle cart__item-count-plus">
+        <b>{item.count}</b>
+        <div className="button button--outline button--circle cart__item-count-plus"
+             onClick={() => changeCount(item.count + 1)}>
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M5.92001 3.84V5.76V8.64C5.92001 9.17016 5.49017 9.6 4.96001 9.6C4.42985 9.6 4.00001 9.17016 4.00001 8.64L4 5.76L4.00001 3.84V0.96C4.00001 0.42984 4.42985 0 4.96001 0C5.49017 0 5.92001 0.42984 5.92001 0.96V3.84Z"
@@ -46,10 +54,10 @@ const CardIItem = () => {
         </div>
       </div>
       <div className="cart__item-price">
-        <b>770 ₽</b>
+        <b>{item.price * item.count}</b>
       </div>
       <div className="cart__item-remove">
-        <div className="button button--outline button--circle">
+        <div className="button button--outline button--circle" onClick={deleteItemCart}>
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M5.92001 3.84V5.76V8.64C5.92001 9.17016 5.49017 9.6 4.96001 9.6C4.42985 9.6 4.00001 9.17016 4.00001 8.64L4 5.76L4.00001 3.84V0.96C4.00001 0.42984 4.42985 0 4.96001 0C5.49017 0 5.92001 0.42984 5.92001 0.96V3.84Z"
@@ -65,4 +73,4 @@ const CardIItem = () => {
   );
 };
 
-export default CardIItem;
+export default CartItem;

@@ -10,6 +10,10 @@
   &__parent {
     display: flex;
     justify-content: center;
+    transition: .15s;
+    &:hover {
+      scale: 1.1;
+    }
   }
 
   &__image {
@@ -45,6 +49,7 @@
         font-weight: 600;
         font-size: 14px;
         @include noselect();
+
         &.active {
           background: #ffffff;
           box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04);

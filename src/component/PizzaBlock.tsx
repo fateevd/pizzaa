@@ -1,6 +1,9 @@
 import React, {FC} from 'react';
 import {PizzasBlock} from "../page/Home";
 import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {addPizzaToCart} from "../redux/slices/cartSlice";
+import {RootState} from "../redux/store";
 
 
 type PizzaBlockProps = PizzasBlock;
@@ -11,7 +14,32 @@ const PizzaBlock: FC<PizzaBlockProps> = ({id, title, price, types, imageUrl, siz
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentItem = useSelector((state: RootState) => state.cart.items.find(obj => obj.id === id));
+  const countItem = currentItem ? currentItem.count : 0;
 
+
+  const changeDough = (event: React.MouseEvent<HTMLElement>, typeId: number) => {
+    event.stopPropagation();
+    setActiveType(typeId);
+  }
+
+  const changeSize = (event: React.MouseEvent<HTMLElement>, size: number) => {
+    event.stopPropagation();
+    setActiveSize(size);
+  }
+
+  const addToCart = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    dispatch(addPizzaToCart({
+      id,
+      title,
+      price,
+      type: typeName[activeType],
+      imageUrl,
+      size: sizes[activeSize],
+    }));
+  }
 
   return (
     <div className="pizza-block__parent">
@@ -26,7 +54,7 @@ const PizzaBlock: FC<PizzaBlockProps> = ({id, title, price, types, imageUrl, siz
           <ul>
             {types.map(typeId =>
               <React.Fragment key={typeId}>
-                <li onClick={() => setActiveType(typeId)}
+                <li onClick={(event) => changeDough(event, typeId)}
                     className={activeType === typeId ? "active" : ""}>{typeName[typeId]}
                 </li>
               </React.Fragment>
@@ -35,7 +63,7 @@ const PizzaBlock: FC<PizzaBlockProps> = ({id, title, price, types, imageUrl, siz
           <ul>
             {sizes.map((size, index) =>
               <React.Fragment key={size}>
-                <li onClick={() => setActiveSize(index)}
+                <li onClick={(event) => changeSize(event, index)}
                     className={activeSize === index ? "active" : ""}>{size} см.
                 </li>
               </React.Fragment>
@@ -44,7 +72,7 @@ const PizzaBlock: FC<PizzaBlockProps> = ({id, title, price, types, imageUrl, siz
         </div>
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">от {price} ₽</div>
-          <button className="button button--outline button--add">
+          <button className="button button--outline button--add" onClick={(event) => addToCart(event)}>
             <svg
               width="12"
               height="12"
@@ -58,7 +86,7 @@ const PizzaBlock: FC<PizzaBlockProps> = ({id, title, price, types, imageUrl, siz
               />
             </svg>
             <span>Добавить</span>
-            <i>0</i>
+            {countItem > 0 && <i>{countItem}</i> }
           </button>
         </div>
       </div>
