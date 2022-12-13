@@ -1,7 +1,11 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {CartSliceState} from "./types";
+import {saveLocalStorage} from "../../../utils";
+import sort from "../../../component/Sort";
 
-const initialState: CartSliceState = {
+const storage = localStorage.getItem("cart");
+
+const initialState: CartSliceState = storage ? JSON.parse(storage) :  {
   items: [],
   totalPrice: 0,
 };
@@ -24,6 +28,7 @@ export const cartSlice = createSlice({
       state.totalPrice = state.items.reduce((sum: number, obj: any) => {
         return (obj.price * obj.count) + sum
       }, 0);
+      saveLocalStorage({items: state.items, totalPrice: state.totalPrice});
     },
     addCountPizza(state, action) {
       const hasPizza = state.items.find(obj => obj.id === action.payload.id && obj.type === action.payload.type && obj.size === action.payload.size);
@@ -36,16 +41,19 @@ export const cartSlice = createSlice({
       state.totalPrice = state.items.reduce((sum: number, obj: any) => {
         return (obj.price * obj.count) + sum
       }, 0);
+      saveLocalStorage({items: state.items, totalPrice: state.totalPrice});
     },
     deletePizzaToCart(state, action) {
       state.items = state.items.filter((obj) => obj.id !== action.payload.id && obj.type === action.payload.type && obj.size === action.payload.size);
       state.totalPrice = state.items.reduce((sum: number, obj: any) => {
         return (obj.price * obj.count) + sum
       }, 0);
+      saveLocalStorage({items: state.items, totalPrice: state.totalPrice});
     },
     clearCart(state) {
       state.items = [];
       state.totalPrice = 0;
+      localStorage.removeItem("cart");
     }
   }
 });
