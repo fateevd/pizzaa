@@ -5,3 +5,9 @@ export const calcAllCount = (array: any) => {
 export const saveLocalStorage = (obj: any) => {
   localStorage.setItem("cart", JSON.stringify(obj));
 }
+
+export const calculateTotalPrice = (array: any): number => {
+  return array.reduce((sum: number, obj: any) => {
+    return (obj.price * obj.count) + sum
+  }, 0);
+}

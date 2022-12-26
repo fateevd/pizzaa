@@ -1,10 +1,10 @@
 import React from 'react';
 import {Categories, PizzaBlock, Skeleton, Sort} from "../component";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../redux/store";
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import qs from "qs";
+import {fetchPizzas} from "../redux/slices/pizzaSlice";
 
 
 export type PizzasBlock = {
@@ -19,26 +19,30 @@ export type PizzasBlock = {
 };
 
 const Home = () => {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [data, setData] = React.useState([]);
-  const skeleton = [...new Array(6)].map((_, index) => <Skeleton key={index}/>);
   const storeFilter = useSelector((state: RootState) => state.filter);
+  const {items, status} = useSelector((state: RootState) => state.pizza);
   const {categoryId, searchValue, sort} = storeFilter;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const skeleton = [...new Array(6)].map((_, index) => <Skeleton key={index}/>);
+  const pizza = items.map((item: PizzasBlock) =>
+    <PizzaBlock key={item.id} {...item}/>
+  )
+
 
   React.useEffect(() => {
-    setIsLoading(true);
     const sortBy = sort.sortProperty.replace('-', '');
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const search = searchValue.length > 0 ? `search=${searchValue}` : '';
-    axios.get(`https://634c67c0acb391d34a853ce2.mockapi.io/item?${category}&sortBy=${sortBy}&order=${order}&${search}`).then(({data}) => {
-      setData(data);
-      setIsLoading(false);
-    });
-  }, [categoryId, sort.sortProperty, searchValue]);
 
-  React.useEffect(() => {
+    dispatch(fetchPizzas({
+      category,
+      sortBy,
+      order,
+      search
+    }));
+
     let saveQuery: Record<string, string | number | Sort> = {};
     let key: keyof typeof storeFilter;
     for (key in storeFilter) {
@@ -60,13 +64,18 @@ const Home = () => {
           <Sort/>
         </div>
         <h2 className="content__title">Все пиццы</h2>
-        <div className="content__items">
-          {!isLoading ? data.map((item: PizzasBlock) =>
-              <PizzaBlock key={item.id} {...item}/>
-            ) :
-            skeleton
-          }
-        </div>
+
+        {status === 'error' ? <div className="content__error">
+            <h2 className="content__error-info">Произошла ошибка</h2>
+            <p>К сожелению, попробуйте повторить попытку позже Не удалось получить пиццы 😕</p>
+          </div>
+          :
+          <div className="content__items">
+            {
+              status === 'success' ? pizza : skeleton
+            }
+          </div>
+        }
       </div>
     </>
   );

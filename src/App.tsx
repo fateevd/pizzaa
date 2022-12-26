@@ -6,6 +6,7 @@ import Home from "./page/Home";
 import NotFound from "./page/NotFound";
 
 function App() {
+  console.clear();
   return (
       <Routes>
         <Route path="/" element={<MainLayout/>}>
