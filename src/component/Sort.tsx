@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {setSortName} from '../redux/slices/filterSlice';
-import {RootState} from "../redux/store";
+import {selectFilterSort} from "../redux/slices/filterSlice/selector";
 
 type Sort = {
   name: string,
@@ -9,8 +9,9 @@ type Sort = {
 }
 
 const Sort = () => {
+
   const dispatch = useDispatch();
-  const sort = useSelector((state: RootState) => state.filter.sort)
+  const sort = useSelector(selectFilterSort);
   const sortRef = React.useRef(null);
 
   const sortName: Sort[] = [

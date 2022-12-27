@@ -5,6 +5,8 @@ import {RootState} from "../redux/store";
 import {useNavigate} from "react-router-dom";
 import qs from "qs";
 import {fetchPizzas} from "../redux/slices/pizzaSlice";
+import {selectFilter} from "../redux/slices/filterSlice/selector";
+import { selectPizza } from '../redux/slices/pizzaSlice/selector';
 
 
 export type PizzasBlock = {
@@ -19,15 +21,13 @@ export type PizzasBlock = {
 };
 
 const Home = () => {
-  const storeFilter = useSelector((state: RootState) => state.filter);
-  const {items, status} = useSelector((state: RootState) => state.pizza);
+  const storeFilter = useSelector(selectFilter);
+  const {items, status} = useSelector(selectPizza);
   const {categoryId, searchValue, sort} = storeFilter;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const skeleton = [...new Array(6)].map((_, index) => <Skeleton key={index}/>);
-  const pizza = items.map((item: PizzasBlock) =>
-    <PizzaBlock key={item.id} {...item}/>
-  )
+  const pizza = items.map((item: PizzasBlock) => <PizzaBlock key={item.id} {...item}/>);
 
 
   React.useEffect(() => {

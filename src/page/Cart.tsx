@@ -5,11 +5,12 @@ import {RootState} from "../redux/store";
 import {Link} from "react-router-dom";
 import {calcAllCount} from "../utils";
 import {clearCart} from "../redux/slices/cartSlice";
+import {selectCart} from "../redux/slices/cartSlice/selector";
 
 
 
 const Cart = () => {
-  const cart = useSelector((state: RootState) => state.cart);
+  const cart = useSelector(selectCart);
   const {items, totalPrice} = cart;
   const dispatch = useDispatch();
   const removeCart = () => {

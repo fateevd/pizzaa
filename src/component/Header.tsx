@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setSearchValue} from "../redux/slices/filterSlice";
 import {RootState} from "../redux/store";
 import {calcAllCount} from "../utils";
+import {selectCart} from "../redux/slices/cartSlice/selector";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -13,8 +14,7 @@ const Header = () => {
   const onChange = (e : string) => {
     dispatch(setSearchValue(e));
   }
-  const countPizza = useSelector((state: RootState) => state.cart);
-  const {items, totalPrice} = countPizza;
+  const {items, totalPrice} = useSelector(selectCart);
   const navigate = useNavigate();
   return (
     <div className="header">

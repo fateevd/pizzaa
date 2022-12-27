@@ -13,7 +13,7 @@ const initialState: CounterState = {
 
 export const fetchPizzas: any = createAsyncThunk(
   'pizza/fetchPizzasStatus',
-  async (query) => {
+  async (query, thunkApi) => {
     const {
       category,
       sortBy,

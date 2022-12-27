@@ -3,7 +3,7 @@ import {PizzasBlock} from "../page/Home";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {addPizzaToCart} from "../redux/slices/cartSlice";
-import {RootState} from "../redux/store";
+import {selectCurrentItemById} from "../redux/slices/cartSlice/selector";
 
 
 type PizzaBlockProps = PizzasBlock;
@@ -15,7 +15,7 @@ const PizzaBlock: FC<PizzaBlockProps> = ({id, title, price, types, imageUrl, siz
   const [activeSize, setActiveSize] = React.useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const currentItem = useSelector((state: RootState) => state.cart.items.find(obj => obj.id === id));
+  const currentItem = useSelector(selectCurrentItemById(id));
   const countItem = currentItem ? currentItem.count : 0;
 
 
@@ -86,7 +86,7 @@ const PizzaBlock: FC<PizzaBlockProps> = ({id, title, price, types, imageUrl, siz
               />
             </svg>
             <span>Добавить</span>
-            {countItem > 0 && <i>{countItem}</i> }
+            {countItem > 0 && <i>{countItem}</i>}
           </button>
         </div>
       </div>
