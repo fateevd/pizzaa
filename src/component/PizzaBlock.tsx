@@ -7,10 +7,9 @@ import {selectCurrentItemById} from "../redux/slices/cartSlice/selector";
 
 
 type PizzaBlockProps = PizzasBlock;
-
+export const typeName = ['Тонкое', 'Традиционное'];
 const PizzaBlock: FC<PizzaBlockProps> = ({id, title, price, types, imageUrl, sizes, category, rating}) => {
 
-  const typeName = ['Тонкое', 'Традиционное'];
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
   const navigate = useNavigate();

@@ -1,7 +1,6 @@
 import React from 'react';
 import {Categories, PizzaBlock, Skeleton, Sort} from "../component";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../redux/store";
 import {useNavigate} from "react-router-dom";
 import qs from "qs";
 import {fetchPizzas} from "../redux/slices/pizzaSlice";
